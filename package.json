@@ -1,0 +1,6 @@
+{
+  "name": "certiguard",
+  "version": "1.0.0",
+  "description": "CertiGuard - Digital Certificate Validation and Expiry Detection Simulator using X.509",
+  "type": "commonjs"
+}

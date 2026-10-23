@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="CertiGuard Demo Certificate Library — Inspect authentic X.509 Root CA certificates and educational test fixtures.">
+  <title>Demo Certificate Library — CertiGuard</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- Header -->
+  <header class="site-header" id="siteHeader">
+    <div class="header-inner container">
+      <div class="brand">
+        <a href="index.html" class="brand-link" aria-label="CertiGuard Home">
+          <div class="logo-shield">
+            <svg class="shield-svg" viewBox="0 0 40 46" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M20 2L3 8V20C3 31.2 10.3 41.5 20 44C29.7 41.5 37 31.2 37 20V8L20 2Z" fill="url(#shieldGradDemo)" stroke="#00F2FE" stroke-width="2" stroke-linejoin="round"/>
+              <path d="M13 22.5L18 27.5L27 18" stroke="#00F2FE" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+              <defs>
+                <linearGradient id="shieldGradDemo" x1="20" y1="2" x2="20" y2="44" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#0F2B48" stop-opacity="0.95"/>
+                  <stop stop-color="#06121E" stop-opacity="0.98"/>
+                </linearGradient>
+              </defs>
+            </svg>
+            <div class="glow-dot"></div>
+          </div>
+          <div class="brand-text">
+            <span class="brand-name">CertiGuard</span>
+            <span class="brand-tagline">Verify. Validate. Trust.</span>
+          </div>
+        </a>
+      </div>
+
+      <nav class="main-nav" aria-label="Main Navigation">
+        <ul class="nav-list">
+          <li><a href="index.html" class="nav-link">Home</a></li>
+          <li><a href="start-analysis.html" class="nav-link">Start Analysis</a></li>
+          <li><a href="demo.html" class="nav-link active" aria-current="page">Demo Analysis</a></li>
+        </ul>
+      </nav>
+
+      <div class="header-actions" style="display:flex; align-items:center; gap:0.75rem;">
+        <div class="header-badge">
+          <span class="pulse-indicator" aria-hidden="true"></span>
+          <span class="badge-text">Library Catalog</span>
+        </div>
+        <button type="button" class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle navigation menu" aria-expanded="false">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer -->
+  <div class="mobile-nav-drawer" id="mobileNavDrawer">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="start-analysis.html" class="nav-link">Start Analysis</a>
+    <a href="demo.html" class="nav-link active">Demo Analysis</a>
+  </div>
+
+  <!-- Main Content -->
+  <main class="container" style="padding-top: 2.5rem; padding-bottom: 5rem;" id="demoLibraryContainer">
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb-trail" aria-label="Breadcrumb">
+      <a href="index.html" class="breadcrumb-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <span>Home</span>
+      </a>
+      <span class="breadcrumb-sep">/</span>
+      <span class="breadcrumb-current">Demo Certificate Library</span>
+    </nav>
+
+    <!-- Page Header -->
+    <div class="page-header-block">
+      <div class="page-header-row">
+        <div>
+          <h1 class="page-title">Demo Certificate Library</h1>
+          <p class="page-subtitle">Choose a certificate to inspect its properties and run the validation checks.</p>
+        </div>
+        <a href="index.html" class="btn-back">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+          <span>Back to Home</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Educational Context Notice -->
+    <div class="rfc-reference-banner" style="margin-bottom: 2.25rem;">
+      <div class="rfc-icon-wrap">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00F2FE" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+      </div>
+      <div class="rfc-info-content">
+        <span class="rfc-label">EDUCATIONAL CATALOG NOTICE</span>
+        <p class="rfc-desc">
+          This library includes four official root CA certificates from established authorities alongside two synthetic end-entity server fixtures designed for educational evaluation. Select any card to launch its dedicated analysis page.
+        </p>
+      </div>
+    </div>
+
+    <!-- Certificate Cards Grid -->
+    <div class="library-grid" id="certLibraryGrid">
+      <!-- 1. DigiCert Global Root G2 -->
+      <div class="cert-item-card" data-cert-id="digicert-g2" id="cardDigiCertG2">
+        <div class="item-top">
+          <span class="item-type-badge">Root CA Certificate</span>
+          <span class="item-format-tag font-mono">PEM</span>
+        </div>
+        <h2 class="item-name" style="font-size:1.15rem; margin-top:0.4rem;">DigiCert Global Root G2</h2>
+        <p class="item-authority">DigiCert, Inc.</p>
+        <p style="font-size:0.84rem; color:var(--text-secondary); margin:0.6rem 0 1rem; line-height:1.45;">
+          Publicly trusted root certificate authority operated by DigiCert, Inc. Widely embedded in client operating systems and browser trust stores.
+        </p>
+        <div class="item-file-info">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          <span class="font-mono">certificates/DigiCertGlobalRootG2.pem</span>
+        </div>
+        <a href="analysis.html?id=digicert-g2" class="btn btn-library-select" id="btnLoadDigiCertG2">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          <span>View & Analyze</span>
+        </a>
+      </div>
+
+      <!-- 2. ISRG Root X1 -->
+      <div class="cert-item-card" data-cert-id="isrg-root-x1" id="cardISRGX1">
+        <div class="item-top">
+          <span class="item-type-badge">Root CA Certificate</span>
+          <span class="item-format-tag font-mono">PEM</span>
+        </div>
+        <h2 class="item-name" style="font-size:1.15rem; margin-top:0.4rem;">ISRG Root X1</h2>
+        <p class="item-authority">Internet Security Research Group (Let's Encrypt)</p>
+        <p style="font-size:0.84rem; color:var(--text-secondary); margin:0.6rem 0 1rem; line-height:1.45;">
+          Primary trust anchor for Let's Encrypt automated TLS certificates, enabling global encrypted web communication under open PKI standards.
+        </p>
+        <div class="item-file-info">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          <span class="font-mono">certificates/isrgrootx1.pem</span>
+        </div>
+        <a href="analysis.html?id=isrg-root-x1" class="btn btn-library-select" id="btnLoadISRGX1">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          <span>View & Analyze</span>
+        </a>
+      </div>
+
+      <!-- 3. Amazon Root CA 1 -->
+      <div class="cert-item-card" data-cert-id="amazon-root-ca-1" id="cardAmazon1">
+        <div class="item-top">
+          <span class="item-type-badge">Root CA Certificate</span>
+          <span class="item-format-tag font-mono">PEM</span>
+        </div>
+        <h2 class="item-name" style="font-size:1.15rem; margin-top:0.4rem;">Amazon Root CA 1</h2>
+        <p class="item-authority">Amazon Trust Services</p>
+        <p style="font-size:0.84rem; color:var(--text-secondary); margin:0.6rem 0 1rem; line-height:1.45;">
+          Official root certificate authority operated by Amazon Trust Services for AWS CloudFront, API Gateway, and enterprise cloud infrastructure.
+        </p>
+        <div class="item-file-info">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          <span class="font-mono">certificates/AmazonRootCA1.pem</span>
+        </div>
+        <a href="analysis.html?id=amazon-root-ca-1" class="btn btn-library-select" id="btnLoadAmazon1">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          <span>View & Analyze</span>
+        </a>
+      </div>
+
+      <!-- 4. GTS Root R1 -->
+      <div class="cert-item-card" data-cert-id="gts-root-r1" id="cardGTSR1">
+        <div class="item-top">
+          <span class="item-type-badge">Root CA Certificate</span>
+          <span class="item-format-tag font-mono">PEM</span>
+        </div>
+        <h2 class="item-name" style="font-size:1.15rem; margin-top:0.4rem;">GTS Root R1</h2>
+        <p class="item-authority">Google Trust Services LLC</p>
+        <p style="font-size:0.84rem; color:var(--text-secondary); margin:0.6rem 0 1rem; line-height:1.45;">
+          Authoritative root CA maintained by Google Trust Services LLC, securing Google Cloud platform services and web applications globally.
+        </p>
+        <div class="item-file-info">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          <span class="font-mono">certificates/gtsr1.pem</span>
+        </div>
+        <a href="analysis.html?id=gts-root-r1" class="btn btn-library-select" id="btnLoadGTSR1">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          <span>View & Analyze</span>
+        </a>
+      </div>
+
+      <!-- 5. Northstar Web Services -->
+      <div class="cert-item-card" data-cert-id="northstar-services" id="cardNorthstar">
+        <div class="item-top">
+          <span class="item-type-badge">End-Entity Server Certificate</span>
+          <span class="synthetic-notice-badge">Educational Test Fixture</span>
+        </div>
+        <h2 class="item-name" style="font-size:1.15rem; margin-top:0.4rem;">Northstar Web Services</h2>
+        <p class="item-authority">Northstar Security Services</p>
+        <p style="font-size:0.84rem; color:var(--text-secondary); margin:0.6rem 0 1rem; line-height:1.45;">
+          End-entity server certificate issued by an internal corporate issuing authority for cloud API services. Built for lifecycle and policy evaluation.
+        </p>
+        <div class="item-file-info">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          <span class="font-mono">certificates/northstar-services.pem</span>
+        </div>
+        <a href="analysis.html?id=northstar-services" class="btn btn-library-select" id="btnLoadNorthstar">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          <span>View & Analyze</span>
+        </a>
+      </div>
+
+      <!-- 6. BluePeak Secure Gateway -->
+      <div class="cert-item-card" data-cert-id="bluepeak-gateway" id="cardBluePeak">
+        <div class="item-top">
+          <span class="item-type-badge">End-Entity Server Certificate</span>
+          <span class="synthetic-notice-badge">Educational Test Fixture</span>
+        </div>
+        <h2 class="item-name" style="font-size:1.15rem; margin-top:0.4rem;">BluePeak Secure Gateway</h2>
+        <p class="item-authority">BluePeak Technologies</p>
+        <p style="font-size:0.84rem; color:var(--text-secondary); margin:0.6rem 0 1rem; line-height:1.45;">
+          End-entity gateway certificate configured for internal cluster mesh communication across secure service boundaries.
+        </p>
+        <div class="item-file-info">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          <span class="font-mono">certificates/bluepeak-gateway.pem</span>
+        </div>
+        <a href="analysis.html?id=bluepeak-gateway" class="btn btn-library-select" id="btnLoadBluePeak">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          <span>View & Analyze</span>
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-container">
+      <div class="footer-brand">
+        <div class="brand">
+          <div class="logo-shield">
+            <svg class="shield-svg" viewBox="0 0 40 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M20 2L3 8V20C3 31.2 10.3 41.5 20 44C29.7 41.5 37 31.2 37 20V8L20 2Z" fill="url(#shieldGradDemoF)" stroke="#00F2FE" stroke-width="2" stroke-linejoin="round"/>
+              <path d="M13 22.5L18 27.5L27 18" stroke="#00F2FE" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+              <defs>
+                <linearGradient id="shieldGradDemoF" x1="20" y1="2" x2="20" y2="44" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#0F2B48" stop-opacity="0.95"/>
+                  <stop stop-color="#06121E" stop-opacity="0.98"/>
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+          <div class="brand-text">
+            <span class="brand-name">CertiGuard</span>
+            <span class="brand-tagline">Verify. Validate. Trust.</span>
+          </div>
+        </div>
+        <p class="footer-tagline">
+          Browser-based X.509 Digital Certificate Validation and Expiry Detection Simulator modelled on RFC 5280.
+        </p>
+      </div>
+
+      <div class="footer-links-group">
+        <div class="footer-col">
+          <span class="footer-col-title">Navigation</span>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="start-analysis.html">Start Analysis</a></li>
+            <li><a href="demo.html">Demo Certificate Library</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <span class="footer-col-title">Specifications</span>
+          <ul>
+            <li><span class="font-mono" style="color:var(--text-muted); font-size:0.8rem;">RFC 5280 PKI Profile</span></li>
+            <li><span class="font-mono" style="color:var(--text-muted); font-size:0.8rem;">RFC 6125 SAN Wildcards</span></li>
+            <li><span class="font-mono" style="color:var(--text-muted); font-size:0.8rem;">RFC 6960 OCSP Protocol</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container footer-bottom-inner">
+        <p>&copy; 2026 CertiGuard Simulator. Developed for academic presentation and PKI research demonstration.</p>
+        <span class="client-side-tag">100% Client-Side Pure JavaScript</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="lib/forge.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

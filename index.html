@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="CertiGuard — Digital Certificate Validation & Expiry Detection Simulator using X.509 and RFC 5280 standards.">
+  <title>CertiGuard — Digital Certificate Validation & Expiry Detection Simulator</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- Header -->
+  <header class="site-header" id="siteHeader">
+    <div class="header-inner container">
+      <div class="brand">
+        <a href="index.html" class="brand-link" aria-label="CertiGuard Home">
+          <div class="logo-shield">
+            <svg class="shield-svg" viewBox="0 0 40 46" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M20 2L3 8V20C3 31.2 10.3 41.5 20 44C29.7 41.5 37 31.2 37 20V8L20 2Z" fill="url(#shieldGradHome)" stroke="#00F2FE" stroke-width="2" stroke-linejoin="round"/>
+              <path d="M13 22.5L18 27.5L27 18" stroke="#00F2FE" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+              <defs>
+                <linearGradient id="shieldGradHome" x1="20" y1="2" x2="20" y2="44" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#0F2B48" stop-opacity="0.95"/>
+                  <stop stop-color="#06121E" stop-opacity="0.98"/>
+                </linearGradient>
+              </defs>
+            </svg>
+            <div class="glow-dot"></div>
+          </div>
+          <div class="brand-text">
+            <span class="brand-name">CertiGuard</span>
+            <span class="brand-tagline">Verify. Validate. Trust.</span>
+          </div>
+        </a>
+      </div>
+
+      <nav class="main-nav" aria-label="Main Navigation">
+        <ul class="nav-list">
+          <li><a href="index.html" class="nav-link active" aria-current="page">Home</a></li>
+          <li><a href="start-analysis.html" class="nav-link">Start Analysis</a></li>
+          <li><a href="demo.html" class="nav-link">Demo Analysis</a></li>
+        </ul>
+      </nav>
+
+      <div class="header-actions" style="display:flex; align-items:center; gap:0.75rem;">
+        <div class="header-badge">
+          <span class="pulse-indicator" aria-hidden="true"></span>
+          <span class="badge-text">Client-Side Simulator</span>
+        </div>
+        <button type="button" class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle navigation menu" aria-expanded="false">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer -->
+  <div class="mobile-nav-drawer" id="mobileNavDrawer">
+    <a href="index.html" class="nav-link active">Home</a>
+    <a href="start-analysis.html" class="nav-link">Start Analysis</a>
+    <a href="demo.html" class="nav-link">Demo Analysis</a>
+  </div>
+
+  <main>
+    <!-- Hero Section -->
+    <section class="hero-section" id="landingHero">
+      <div class="hero-bg-fx" aria-hidden="true">
+        <div class="grid-overlay"></div>
+        <div class="radial-glow cyan-glow"></div>
+        <div class="radial-glow blue-glow"></div>
+      </div>
+      <div class="container hero-container">
+        <div class="hero-content">
+          <div class="hero-label">
+            <svg class="icon-inline" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <span>RFC 5280 COMPLIANT SPECIFICATION MODEL</span>
+          </div>
+          <h1 class="hero-title">CertiGuard</h1>
+          <p style="font-family:var(--font-heading); font-size:1.45rem; font-weight:700; color:#FFFFFF; margin-top:0.4rem; margin-bottom:1rem; line-height:1.3;">
+            Digital Certificate Validation & Expiry Detection Simulator
+          </p>
+          <p class="hero-subtitle">
+            Inspect X.509 certificates, evaluate validity periods, verify hostname matching, and understand certificate trust through an interactive security analysis experience.
+          </p>
+          <div class="hero-actions">
+            <a href="start-analysis.html" class="btn btn-primary btn-large" id="heroValidateBtn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              <span>Start Analysis</span>
+            </a>
+            <a href="demo.html" class="btn btn-secondary btn-large" id="heroDemoBtn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+              <span>Demo Analysis</span>
+            </a>
+          </div>
+          <div class="hero-features-preview">
+            <div class="preview-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00F2FE" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>8-Point RFC 5280 Suite</span>
+            </div>
+            <div class="preview-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00F2FE" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>Authentic CA Manifest</span>
+            </div>
+            <div class="preview-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00F2FE" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>RFC 6125 SAN Wildcards</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hero Cybersecurity Visual -->
+        <div class="hero-visual">
+          <div class="cert-card-visual" id="certCardVisual">
+            <div class="visual-header">
+              <div class="visual-badge trusted">
+                <span class="visual-dot"></span>
+                <span>PKI SECURITY SIMULATOR</span>
+              </div>
+              <span class="visual-algo">X.509 v3 • SHA256withRSA</span>
+            </div>
+            <div class="visual-body">
+              <div class="visual-row">
+                <span class="label">Certificate Subject</span>
+                <span class="value font-mono" style="color:var(--cyan-primary);">DigiCert Global Root G2</span>
+              </div>
+              <div class="visual-row">
+                <span class="label">Issuing Trust Anchor</span>
+                <span class="value font-mono">DigiCert Inc (Self-Signed Root Anchor)</span>
+              </div>
+              <div class="visual-row">
+                <span class="label">Status & Expiry Period</span>
+                <span class="value code-val">ACTIVE (Valid until 2038-01-15)</span>
+              </div>
+              <div class="visual-chain-snippet">
+                <div class="chain-step active">
+                  <span class="step-num">1</span>
+                  <span>End Entity</span>
+                </div>
+                <div class="chain-link-line"></div>
+                <div class="chain-step active">
+                  <span class="step-num">2</span>
+                  <span>Issuing CA</span>
+                </div>
+                <div class="chain-link-line"></div>
+                <div class="chain-step active">
+                  <span class="step-num">3</span>
+                  <span>Root CA</span>
+                </div>
+              </div>
+            </div>
+            <div class="visual-footer">
+              <span class="font-mono">RFC 5280 §6.1 Path Validation</span>
+              <span class="font-mono" style="color:var(--color-success);">8 / 8 Checks Active</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Small Feature Highlights Row -->
+    <section class="landing-features-section">
+      <div class="container">
+        <div class="section-header" style="text-align:center; max-width:700px; margin:0 auto 1.5rem;">
+          <div class="section-tag">CORE CAPABILITIES</div>
+          <h2 class="section-title">Comprehensive Certificate Analysis</h2>
+          <p class="section-desc">Key verification checks modeled directly upon internet PKI standards.</p>
+        </div>
+
+        <div class="feature-cards-grid">
+          <!-- Card 1 -->
+          <div class="feature-highlight-card">
+            <div class="feature-icon-badge">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            </div>
+            <h3 class="feature-title">X.509 Certificate Inspection</h3>
+            <p class="feature-desc">
+              Extract and examine structural X.509 v3 parameters including Subject Distinguished Name, Serial Numbers, Basic Constraints, and Key Usage extensions.
+            </p>
+            <span class="feature-spec-badge">RFC 5280 §4.1</span>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="feature-highlight-card">
+            <div class="feature-icon-badge">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+            <h3 class="feature-title">Expiry & Validity Checks</h3>
+            <p class="feature-desc">
+              Calculate temporal validity windows (notBefore and notAfter). Detect expired certificates, inactive date ranges, and configurable near-expiry warnings.
+            </p>
+            <span class="feature-spec-badge">RFC 5280 §4.1.2.5</span>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="feature-highlight-card">
+            <div class="feature-icon-badge">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            </div>
+            <h3 class="feature-title">Hostname / SAN Verification</h3>
+            <p class="feature-desc">
+              Evaluate Subject Alternative Names (SANs) against requested hostnames. Supports exact FQDN matches and RFC 6125 single-label DNS wildcard patterns.
+            </p>
+            <span class="feature-spec-badge">RFC 6125 / §4.2.1.6</span>
+          </div>
+
+          <!-- Card 4 -->
+          <div class="feature-highlight-card">
+            <div class="feature-icon-badge">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <h3 class="feature-title">Certificate Trust Evaluation</h3>
+            <p class="feature-desc">
+              Verify the chain of trust from target leaf to intermediate authority, concluding at an authoritative pre-installed Root CA trust anchor store.
+            </p>
+            <span class="feature-spec-badge">RFC 5280 §6.1</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PKI Trust Architecture Overview -->
+    <section class="how-it-works-section" style="padding: 4.5rem 0; border-top: 1px solid var(--border-subtle); background: rgba(10, 16, 29, 0.4);">
+      <div class="container">
+        <div class="section-header" style="text-align:center; max-width:720px; margin:0 auto 2.5rem;">
+          <div class="section-tag">PKI ARCHITECTURE</div>
+          <h2 class="section-title">How Digital Trust is Established</h2>
+          <p class="section-desc">RFC 5280 path validation establishes mathematical and policy trust through hierarchical certificate chains.</p>
+        </div>
+
+        <div class="visual-chain-flow">
+          <div class="chain-flow-node">
+            <div class="node-icon-circle">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00F2FE" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            </div>
+            <h4 class="node-title">1. End-Entity Server</h4>
+            <p class="node-desc">Presents public key and SANs to client TLS sockets (isCA=false).</p>
+          </div>
+
+          <div class="chain-arrow">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#00F2FE" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </div>
+
+          <div class="chain-flow-node">
+            <div class="node-icon-circle">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00F2FE" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+            </div>
+            <h4 class="node-title">2. Intermediate CA</h4>
+            <p class="node-desc">Authorized issuing CA that signs leaves and isolates the root key (isCA=true, keyCertSign).</p>
+          </div>
+
+          <div class="chain-arrow">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#00F2FE" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </div>
+
+          <div class="chain-flow-node">
+            <div class="node-icon-circle highlight">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <h4 class="node-title">3. Root CA Anchor</h4>
+            <p class="node-desc">Self-signed, highly secured trust anchor pre-installed in OS and browser trust stores.</p>
+          </div>
+        </div>
+
+        <div style="display:flex; justify-content:center; gap:1rem; margin-top:3rem; flex-wrap:wrap;">
+          <a href="start-analysis.html" class="btn btn-primary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <span>Analyze Custom Parameters</span>
+          </a>
+          <a href="demo.html" class="btn btn-secondary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            <span>Inspect Demo Certificate Library</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-container">
+      <div class="footer-brand">
+        <div class="brand">
+          <div class="logo-shield">
+            <svg class="shield-svg" viewBox="0 0 40 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M20 2L3 8V20C3 31.2 10.3 41.5 20 44C29.7 41.5 37 31.2 37 20V8L20 2Z" fill="url(#shieldGradHomeF)" stroke="#00F2FE" stroke-width="2" stroke-linejoin="round"/>
+              <path d="M13 22.5L18 27.5L27 18" stroke="#00F2FE" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+              <defs>
+                <linearGradient id="shieldGradHomeF" x1="20" y1="2" x2="20" y2="44" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#0F2B48" stop-opacity="0.95"/>
+                  <stop stop-color="#06121E" stop-opacity="0.98"/>
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+          <div class="brand-text">
+            <span class="brand-name">CertiGuard</span>
+            <span class="brand-tagline">Verify. Validate. Trust.</span>
+          </div>
+        </div>
+        <p class="footer-tagline">
+          Browser-based X.509 Digital Certificate Validation and Expiry Detection Simulator modelled on RFC 5280.
+        </p>
+      </div>
+
+      <div class="footer-links-group">
+        <div class="footer-col">
+          <span class="footer-col-title">Navigation</span>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="start-analysis.html">Start Analysis</a></li>
+            <li><a href="demo.html">Demo Certificate Library</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <span class="footer-col-title">Standards Profile</span>
+          <ul>
+            <li><span class="font-mono" style="color:var(--text-muted); font-size:0.8rem;">RFC 5280 §4 & §6</span></li>
+            <li><span class="font-mono" style="color:var(--text-muted); font-size:0.8rem;">RFC 6125 SAN Wildcards</span></li>
+            <li><span class="font-mono" style="color:var(--text-muted); font-size:0.8rem;">RFC 6960 CRL / OCSP</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container footer-bottom-inner">
+        <p>&copy; 2026 CertiGuard Simulator. B.Tech IT Academic Demonstration Project.</p>
+        <span class="client-side-tag">100% Client-Side Pure JavaScript</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="lib/forge.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

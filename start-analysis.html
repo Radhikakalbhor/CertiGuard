@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="CertiGuard Certificate Analysis Workbench — Test custom X.509 parameters, inspect PEM certificates, and evaluate RFC 5280 compliance.">
+  <title>Start Analysis — CertiGuard</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- Header -->
+  <header class="site-header" id="siteHeader">
+    <div class="header-inner container">
+      <div class="brand">
+        <a href="index.html" class="brand-link" aria-label="CertiGuard Home">
+          <div class="logo-shield">
+            <svg class="shield-svg" viewBox="0 0 40 46" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M20 2L3 8V20C3 31.2 10.3 41.5 20 44C29.7 41.5 37 31.2 37 20V8L20 2Z" fill="url(#shieldGradStart)" stroke="#00F2FE" stroke-width="2" stroke-linejoin="round"/>
+              <path d="M13 22.5L18 27.5L27 18" stroke="#00F2FE" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+              <defs>
+                <linearGradient id="shieldGradStart" x1="20" y1="2" x2="20" y2="44" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#0F2B48" stop-opacity="0.95"/>
+                  <stop stop-color="#06121E" stop-opacity="0.98"/>
+                </linearGradient>
+              </defs>
+            </svg>
+            <div class="glow-dot"></div>
+          </div>
+          <div class="brand-text">
+            <span class="brand-name">CertiGuard</span>
+            <span class="brand-tagline">Verify. Validate. Trust.</span>
+          </div>
+        </a>
+      </div>
+
+      <nav class="main-nav" aria-label="Main Navigation">
+        <ul class="nav-list">
+          <li><a href="index.html" class="nav-link">Home</a></li>
+          <li><a href="start-analysis.html" class="nav-link active" aria-current="page">Start Analysis</a></li>
+          <li><a href="demo.html" class="nav-link">Demo Analysis</a></li>
+        </ul>
+      </nav>
+
+      <div class="header-actions" style="display:flex; align-items:center; gap:0.75rem;">
+        <div class="header-badge">
+          <span class="pulse-indicator" aria-hidden="true"></span>
+          <span class="badge-text">Interactive Workbench</span>
+        </div>
+        <button type="button" class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle navigation menu" aria-expanded="false">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer -->
+  <div class="mobile-nav-drawer" id="mobileNavDrawer">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="start-analysis.html" class="nav-link active">Start Analysis</a>
+    <a href="demo.html" class="nav-link">Demo Analysis</a>
+  </div>
+
+  <!-- Main Content -->
+  <main class="container" style="padding-top: 2.5rem; padding-bottom: 5rem;" id="startAnalysisContainer">
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb-trail" aria-label="Breadcrumb">
+      <a href="index.html" class="breadcrumb-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <span>Home</span>
+      </a>
+      <span class="breadcrumb-sep">/</span>
+      <span class="breadcrumb-current">Start Analysis</span>
+    </nav>
+
+    <!-- Page Header -->
+    <div class="page-header-block">
+      <div class="page-header-row">
+        <div>
+          <h1 class="page-title">Analyze a Certificate</h1>
+          <p class="page-subtitle">Configure certificate parameters or paste PEM data to evaluate against the 8-point RFC 5280 validation rules.</p>
+        </div>
+        <a href="demo.html" class="btn btn-secondary" style="font-size:0.88rem;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          <span>Browse Demo Library Instead</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Simulator Capability & Educational Scope Notice -->
+    <div class="rfc-reference-banner" style="margin-bottom: 2rem;">
+      <div class="rfc-icon-wrap">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00F2FE" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+      </div>
+      <div class="rfc-info-content">
+        <span class="rfc-label">SIMULATOR CAPABILITIES & RFC 5280 SPECIFICATION SCOPE</span>
+        <p class="rfc-desc">
+          CertiGuard models the path validation algorithms of RFC 5280 §6.1, RFC 6125 SAN wildcard evaluation, and validity windows. It executes client-side simulated checks. For custom certificates, parameters can be customized below or imported via standard PEM formatting.
+        </p>
+      </div>
+    </div>
+
+    <!-- Workbench Tabs -->
+    <div class="workbench-tabs" role="tablist">
+      <button type="button" class="tab-btn active" data-target="tabWorkbench" role="tab" aria-selected="true">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+        <span>Parameter Workbench</span>
+      </button>
+      <button type="button" class="tab-btn" data-target="tabPemInput" role="tab" aria-selected="false">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        <span>PEM Certificate Input</span>
+      </button>
+    </div>
+
+    <!-- TAB 1: Parameter Workbench -->
+    <div class="tab-pane active" id="tabWorkbench">
+      <form id="certForm" class="validator-form" novalidate>
+        <!-- Chain Inspector Preview Bar -->
+        <div class="chain-inspector-card" style="margin-bottom: 1.75rem;">
+          <div class="chain-inspector-header">
+            <div class="chain-header-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00F2FE" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+              <h3>Live Chain of Trust Architecture</h3>
+            </div>
+            <span class="chain-badge font-mono">Real-Time Sync</span>
+          </div>
+          <div class="chain-flow-nodes">
+            <div class="chain-node-box">
+              <span class="node-tag">Target / Leaf</span>
+              <span class="node-name" id="nodeLeafText">api.my-domain.com</span>
+            </div>
+            <div class="chain-connector">↓ Issued By</div>
+            <div class="chain-node-box">
+              <span class="node-tag">Intermediate CA</span>
+              <span class="node-name" id="nodeInterText">DigiCert Global Root G2</span>
+            </div>
+            <div class="chain-connector">↓ Anchor Verification</div>
+            <div class="chain-node-box">
+              <span class="node-tag" id="nodeRootTag">Root (Trusted)</span>
+              <span class="node-name" id="nodeRootText">DigiCert Global Root G2</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <!-- Col 1: Identity & Hostname -->
+          <div class="form-card">
+            <div class="form-card-header">
+              <div class="form-card-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              </div>
+              <h3 class="form-card-title">1. Subject Identity & Hostname</h3>
+            </div>
+            <div class="form-card-body">
+              <div class="form-group">
+                <label for="commonName" class="form-label">Subject Common Name (CN)<span class="req">*</span></label>
+                <input type="text" id="commonName" class="form-input" value="api.my-domain.com" placeholder="e.g. api.my-domain.com" required>
+                <span class="form-hint">Entity identifier (RFC 5280 §4.1.2.6)</span>
+              </div>
+
+              <div class="form-group">
+                <label for="sans" class="form-label">Subject Alternative Names (SANs)</label>
+                <input type="text" id="sans" class="form-input" value="api.my-domain.com, *.my-domain.com" placeholder="Comma-separated (e.g. api.domain.com, *.domain.com)">
+                <span class="form-hint">DNS names for RFC 6125 hostname matching</span>
+              </div>
+
+              <div class="form-group">
+                <label for="hostnameToVerify" class="form-label">Target Hostname to Verify<span class="req">*</span></label>
+                <input type="text" id="hostnameToVerify" class="form-input" value="api.my-domain.com" placeholder="e.g. api.my-domain.com" required>
+                <span class="form-hint">Client connection host evaluated against SANs</span>
+              </div>
+
+              <div class="form-group">
+                <label for="serialNumber" class="form-label">Certificate Serial Number</label>
+                <input type="text" id="serialNumber" class="form-input font-mono" value="04:A2:88:FF:91:2B:10" placeholder="e.g. 04:A2:88:FF:91:2B:10">
+              </div>
+            </div>
+          </div>
+
+          <!-- Col 2: Chain of Trust -->
+          <div class="form-card">
+            <div class="form-card-header">
+              <div class="form-card-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+              </div>
+              <h3 class="form-card-title">2. Issuer & Trust Chain</h3>
+            </div>
+            <div class="form-card-body">
+              <div class="form-group">
+                <label for="issuer" class="form-label">Leaf Issuer DN<span class="req">*</span></label>
+                <input type="text" id="issuer" class="form-input" value="CN = DigiCert Global Root G2, O = DigiCert Inc, C = US" required>
+                <span class="form-hint">Must match intermediate or self-issued Root</span>
+              </div>
+
+              <div class="form-group">
+                <label for="intermediateSubject" class="form-label">Intermediate CA Subject</label>
+                <input type="text" id="intermediateSubject" class="form-input" value="CN = DigiCert Global Root G2, O = DigiCert Inc, C = US">
+              </div>
+
+              <div class="form-group">
+                <label for="intermediateIssuer" class="form-label">Intermediate CA Issuer</label>
+                <input type="text" id="intermediateIssuer" class="form-input" value="CN = DigiCert Global Root G2, O = DigiCert Inc, C = US">
+              </div>
+
+              <div class="form-group">
+                <label for="rootCaSelect" class="form-label">Root CA Trust Store Anchor</label>
+                <select id="rootCaSelect" class="form-select">
+                  <option value="digicert-g2" selected>DigiCert Global Root G2 (Pre-Installed Trusted Root)</option>
+                  <option value="isrg-root-x1">ISRG Root X1 (Pre-Installed Trusted Root)</option>
+                  <option value="amazon-root-ca-1">Amazon Root CA 1 (Pre-Installed Trusted Root)</option>
+                  <option value="gts-root-r1">GTS Root R1 (Pre-Installed Trusted Root)</option>
+                  <option value="untrusted">Custom / Private CA (Untrusted in Client Store)</option>
+                </select>
+                <span class="form-hint">Trust anchor store per RFC 5280 §6.1.1</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Col 3: Validity Dates & Threshold -->
+          <div class="form-card">
+            <div class="form-card-header">
+              <div class="form-card-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              </div>
+              <h3 class="form-card-title">3. Validity Period & Expiry</h3>
+            </div>
+            <div class="form-card-body">
+              <div class="input-row">
+                <div class="form-group">
+                  <label for="notBefore" class="form-label">Valid From (notBefore)<span class="req">*</span></label>
+                  <input type="date" id="notBefore" class="form-input" required>
+                </div>
+                <div class="form-group">
+                  <label for="notAfter" class="form-label">Valid Until (notAfter)<span class="req">*</span></label>
+                  <input type="date" id="notAfter" class="form-input" required>
+                </div>
+              </div>
+
+              <div class="input-row">
+                <div class="form-group">
+                  <label for="evaluationDate" class="form-label">Simulation Date<span class="req">*</span></label>
+                  <input type="date" id="evaluationDate" class="form-input" required>
+                  <span class="form-hint">Defaults to today</span>
+                </div>
+                <div class="form-group">
+                  <label for="warningThreshold" class="form-label">Warning Days Threshold</label>
+                  <input type="number" id="warningThreshold" class="form-input" value="30" min="1" max="365">
+                  <span class="form-hint">Flag if expiring in ≤ N days</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Col 4: Key Usages & Flags -->
+          <div class="form-card">
+            <div class="form-card-header">
+              <div class="form-card-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2l-2 2m-1-1l-3 3m-1-1l-2 2m-1-1l-4 4a5 5 0 0 0 7 7l4-4"/></svg>
+              </div>
+              <h3 class="form-card-title">4. Key Usages & Security Flags</h3>
+            </div>
+            <div class="form-card-body">
+              <label class="form-label" style="margin-bottom: 0.5rem; display:block;">X.509 Key Usage Extensions (RFC 5280 §4.2.1.3)</label>
+              <div class="checkbox-grid">
+                <label class="custom-checkbox">
+                  <input type="checkbox" id="kuDigitalSig" checked>
+                  <span class="checkbox-box"></span>
+                  <span>digitalSignature</span>
+                </label>
+                <label class="custom-checkbox">
+                  <input type="checkbox" id="kuKeyEncipherment" checked>
+                  <span class="checkbox-box"></span>
+                  <span>keyEncipherment</span>
+                </label>
+                <label class="custom-checkbox">
+                  <input type="checkbox" id="kuCertSign">
+                  <span class="checkbox-box"></span>
+                  <span>keyCertSign (CA only)</span>
+                </label>
+                <label class="custom-checkbox">
+                  <input type="checkbox" id="kuCrlSign">
+                  <span class="checkbox-box"></span>
+                  <span>cRLSign</span>
+                </label>
+                <label class="custom-checkbox">
+                  <input type="checkbox" id="kuDataEncipherment">
+                  <span class="checkbox-box"></span>
+                  <span>dataEncipherment</span>
+                </label>
+                <label class="custom-checkbox">
+                  <input type="checkbox" id="kuKeyAgreement">
+                  <span class="checkbox-box"></span>
+                  <span>keyAgreement</span>
+                </label>
+              </div>
+
+              <div class="toggles-grid" style="margin-top: 1.25rem;">
+                <!-- Basic Constraints isCA -->
+                <div class="toggle-card">
+                  <div class="toggle-info">
+                    <span class="toggle-title">Basic Constraints isCA</span>
+                    <span class="toggle-desc">End-entity server must have isCA:false</span>
+                  </div>
+                  <div class="toggle-control">
+                    <span class="toggle-state-text" id="isCaText">No (Leaf)</span>
+                    <label class="switch">
+                      <input type="checkbox" id="isCaCheckbox">
+                      <span class="slider round"></span>
+                    </label>
+                  </div>
+                </div>
+
+                <!-- Intermediate has certSign -->
+                <div class="toggle-card">
+                  <div class="toggle-info">
+                    <span class="toggle-title">Issuing CA Signing Flag</span>
+                    <span class="toggle-desc">Issuing authority possesses certSigning</span>
+                  </div>
+                  <div class="toggle-control">
+                    <span class="toggle-state-text" id="intermediateCertSignText">Yes</span>
+                    <label class="switch">
+                      <input type="checkbox" id="intermediateHasCertSign" checked>
+                      <span class="slider round"></span>
+                    </label>
+                  </div>
+                </div>
+
+                <!-- Cryptographic Signature -->
+                <div class="toggle-card">
+                  <div class="toggle-info">
+                    <span class="toggle-title">Signature Integrity</span>
+                    <span class="toggle-desc">Simulated cryptographic signature digest match</span>
+                  </div>
+                  <div class="toggle-control">
+                    <span class="toggle-state-text" id="signatureText">Pass</span>
+                    <label class="switch">
+                      <input type="checkbox" id="signatureValid" checked>
+                      <span class="slider round"></span>
+                    </label>
+                  </div>
+                </div>
+
+                <!-- Revocation Status -->
+                <div class="toggle-card">
+                  <div class="toggle-info">
+                    <span class="toggle-title">Revocation Flag (CRL/OCSP)</span>
+                    <span class="toggle-desc">Simulated certificate revocation status</span>
+                  </div>
+                  <div class="toggle-control">
+                    <span class="toggle-state-text" id="revokedText">Not Revoked</span>
+                    <label class="switch">
+                      <input type="checkbox" id="isRevoked">
+                      <span class="slider round danger-toggle"></span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Form Actions Bar -->
+        <div class="form-actions-bar" style="margin-top: 2rem;">
+          <div class="actions-left">
+            <button type="submit" class="btn btn-primary" id="btnValidateSubmit">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              <span>Run Certificate Validation</span>
+            </button>
+            <button type="button" class="btn btn-outline" id="btnResetForm">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+              <span>Reset Parameters</span>
+            </button>
+          </div>
+          <div class="actions-tip">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#00F2FE" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            <span>Clicking "Run Certificate Validation" evaluates all 8 RFC 5280 rules.</span>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!-- TAB 2: PEM Certificate Input -->
+    <div class="tab-pane" id="tabPemInput">
+      <div class="form-card" style="margin-bottom: 2rem;">
+        <div class="form-card-header">
+          <div class="form-card-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          </div>
+          <h3 class="form-card-title">Paste or Upload X.509 Certificate in PEM Format</h3>
+        </div>
+        <div class="form-card-body">
+          <!-- File Upload Dropzone -->
+          <div class="upload-dropzone" id="certFileDropzone" role="button" tabindex="0" aria-label="Upload certificate file">
+            <input type="file" id="certFileInput" accept=".pem,.crt,.cer,.txt" style="display:none;">
+            <div class="upload-dropzone-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            </div>
+            <div class="upload-dropzone-text" id="uploadDropzoneText">Click to choose or drag &amp; drop a .pem or .crt certificate file</div>
+            <div class="upload-dropzone-sub">Supports single certificates and concatenated chain bundles (.pem, .crt)</div>
+          </div>
+
+          <p style="font-size:0.88rem; color:var(--text-secondary); margin-bottom:0.75rem; line-height:1.5;">
+            Or paste one or more PEM-encoded certificates starting with <code class="font-mono" style="color:var(--cyan-primary);">-----BEGIN CERTIFICATE-----</code> and ending with <code class="font-mono" style="color:var(--cyan-primary);">-----END CERTIFICATE-----</code>.
+          </p>
+          <div class="form-group">
+            <textarea id="pemTextInput" class="form-input font-mono" rows="9" placeholder="-----BEGIN CERTIFICATE-----&#10;MIIDjjCCAnagAwIBAgIQAzrx5qcRqaC7KGSxHQn65TANBgkqhkiG9w0BAQsFADBh...&#10;-----END CERTIFICATE-----" style="resize:vertical;"></textarea>
+          </div>
+
+          <div class="form-group" style="margin-top: 1rem;">
+            <label for="pemHostnameInput" class="form-label">Target Hostname or IP to Verify against SAN (Optional)</label>
+            <input type="text" id="pemHostnameInput" class="form-input" placeholder="e.g. api.example.com or 192.168.1.1 (leave blank to verify against Subject CN)">
+            <span class="form-hint">Evaluated against certificate Subject Alternative Names (DNS &amp; IP SANs) per RFC 6125.</span>
+          </div>
+
+          <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; margin-top:1.25rem;">
+            <div style="display:flex; gap:0.75rem; flex-wrap:wrap;">
+              <button type="button" class="btn btn-primary" id="btnParseAndValidatePem">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <span>Parse &amp; Validate Certificate</span>
+              </button>
+              <button type="button" class="btn btn-secondary" id="btnParsePem">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+                <span>Load into Parameter Workbench</span>
+              </button>
+              <button type="button" class="btn btn-outline" id="btnClearPem">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                <span>Clear</span>
+              </button>
+            </div>
+            <span style="font-size:0.8rem; color:var(--text-muted);">
+              Runs genuine client-side X.509 parsing and cryptographic validation.
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Validation Results Section -->
+    <div class="results-wrapper" id="resultsWrapper" style="display:none; margin-top:3rem;">
+      <div class="results-panel" id="resultsPanel">
+        <!-- Main Verdict Banner -->
+        <div class="results-banner" id="resultsBanner">
+          <div class="banner-status-badge">
+            <div class="banner-icon-slot" id="bannerIcon"></div>
+            <span class="banner-verdict" id="bannerVerdict">—</span>
+          </div>
+          <div class="banner-details">
+            <h2 class="banner-title" id="bannerTitle">Validation Complete</h2>
+            <p class="banner-desc" id="bannerDesc">Evaluating certificate parameters against standard RFC 5280 validation rules.</p>
+          </div>
+          <div class="banner-score-box">
+            <div class="score-circle">
+              <span class="score-number" id="scoreNumber">0%</span>
+              <span class="score-sub">Score</span>
+            </div>
+            <span class="score-breakdown" id="scoreBreakdown">0/8 Passed</span>
+          </div>
+        </div>
+
+        <!-- Primary Reason / Warning Notice -->
+        <div class="primary-reason-box" id="primaryReasonBox" style="display: none;">
+          <div class="reason-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          </div>
+          <div class="reason-content">
+            <span class="reason-label" id="reasonLabel">Failure Reason:</span>
+            <span class="reason-text" id="reasonText">—</span>
+          </div>
+        </div>
+
+        <!-- Metadata Ribbon -->
+        <div class="results-metadata-ribbon">
+          <div class="result-meta-grid">
+            <div class="meta-item">
+              <span class="meta-label">Subject CN</span>
+              <span class="meta-val font-mono" id="resMetaSubject">—</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Hostname Verified</span>
+              <span class="meta-val font-mono" id="resMetaHostname">—</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Simulated Evaluation Date</span>
+              <span class="meta-val font-mono" id="resMetaEvalDate">—</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Days to Expiry / State</span>
+              <span class="meta-val font-mono" id="resMetaDays">—</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 8 Detailed Check Cards -->
+        <div class="checks-list-container">
+          <div class="checks-header">
+            <h3>Detailed 8-Point RFC 5280 Security Checks</h3>
+            <span class="checks-sub font-mono">Status & Explanations</span>
+          </div>
+          <div class="checks-grid" id="checksList">
+            <!-- Dynamically populated by renderResults() in script.js -->
+          </div>
+        </div>
+
+        <!-- Actionable Recommendations Card -->
+        <div class="recommendations-card">
+          <div class="rec-header">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00F2FE" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            <h4>Actionable Remediation & Guidance</h4>
+          </div>
+          <ul class="rec-list" id="recommendationsList">
+            <!-- Dynamically populated by renderResults() in script.js -->
+          </ul>
+        </div>
+
+        <!-- Export & Navigation Bar -->
+        <div class="report-actions-bar" style="display:flex; align-items:center; justify-content:space-between; padding:1.25rem 2rem; background:rgba(7, 11, 20, 0.8); border-top:1px solid var(--border-subtle); flex-wrap:wrap; gap:1rem;">
+          <div class="report-actions-left" style="display:flex; gap:0.75rem; flex-wrap:wrap;">
+            <button type="button" class="btn btn-secondary" id="btnDownloadReport">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              <span>Download Report (JSON)</span>
+            </button>
+            <button type="button" class="btn btn-outline" id="btnCopySummary">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              <span>Copy Summary</span>
+            </button>
+          </div>
+          <span class="report-timestamp font-mono" id="reportTimestamp" style="font-size:0.75rem; color:var(--text-muted);"></span>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-container">
+      <div class="footer-brand">
+        <div class="brand">
+          <div class="logo-shield">
+            <svg class="shield-svg" viewBox="0 0 40 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M20 2L3 8V20C3 31.2 10.3 41.5 20 44C29.7 41.5 37 31.2 37 20V8L20 2Z" fill="url(#shieldGradStartF)" stroke="#00F2FE" stroke-width="2" stroke-linejoin="round"/>
+              <path d="M13 22.5L18 27.5L27 18" stroke="#00F2FE" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+              <defs>
+                <linearGradient id="shieldGradStartF" x1="20" y1="2" x2="20" y2="44" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#0F2B48" stop-opacity="0.95"/>
+                  <stop stop-color="#06121E" stop-opacity="0.98"/>
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+          <div class="brand-text">
+            <span class="brand-name">CertiGuard</span>
+            <span class="brand-tagline">Verify. Validate. Trust.</span>
+          </div>
+        </div>
+        <p class="footer-tagline">
+          Browser-based X.509 Digital Certificate Validation and Expiry Detection Simulator modelled on RFC 5280.
+        </p>
+      </div>
+
+      <div class="footer-links-group">
+        <div class="footer-col">
+          <span class="footer-col-title">Navigation</span>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="start-analysis.html">Start Analysis</a></li>
+            <li><a href="demo.html">Demo Certificate Library</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <span class="footer-col-title">Specifications</span>
+          <ul>
+            <li><span class="font-mono" style="color:var(--text-muted); font-size:0.8rem;">RFC 5280 Profile</span></li>
+            <li><span class="font-mono" style="color:var(--text-muted); font-size:0.8rem;">RFC 6125 SAN Wildcards</span></li>
+            <li><span class="font-mono" style="color:var(--text-muted); font-size:0.8rem;">RFC 6960 OCSP Protocol</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container footer-bottom-inner">
+        <p>&copy; 2026 CertiGuard Simulator. Interactive Custom Analysis Workbench.</p>
+        <span class="client-side-tag">100% Client-Side Pure JavaScript</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="lib/forge.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
